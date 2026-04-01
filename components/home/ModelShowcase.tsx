@@ -1,27 +1,23 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
 import Link from "next/link";
-import Reveal from "@/components/Reveal";
 
-/* ── SVG Icons ── */
 const HouseIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="24" height="24" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M4 16L16 5L28 16" />
     <path d="M7 14v12h7v-7h4v7h7V14" />
   </svg>
 );
 
 const PlaneIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="24" height="24" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M28 4L14 18" />
     <path d="M28 4L19 28L14 18L4 13L28 4Z" />
   </svg>
 );
 
 const KioskIcon = () => (
-  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="24" height="24" viewBox="0 0 32 32" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <rect x="5" y="4" width="22" height="16" rx="1" />
     <path d="M10 24h12" />
     <path d="M16 20v4" />
@@ -40,8 +36,9 @@ const models = [
       "Build referrals and compound your close rate",
       "Clear path from setter to regional manager",
     ],
-    stats: { left: "Year-Round", right: "Setter → Manager" },
+    stats: { schedule: "Year-Round", path: "Setter → Manager" },
     href: "/locals",
+    iconBg: "#000080",
   },
   {
     number: "02",
@@ -53,8 +50,9 @@ const models = [
       "Housing provided during every stretch",
       "Go home for 20 days. Your time is yours",
     ],
-    stats: { left: "10 On / 20 Off", right: "Housing Included" },
+    stats: { schedule: "10 On / 20 Off", path: "Housing Included" },
     href: "/x-team",
+    iconBg: "#800000",
   },
   {
     number: "03",
@@ -66,109 +64,198 @@ const models = [
       "No doors. Consistent hours. Full training",
       "Commission on every deal that closes",
     ],
-    stats: { left: "In-Store", right: "No Exp. Required" },
+    stats: { schedule: "In-Store", path: "No Exp. Required" },
     href: "/retail",
+    iconBg: "#006400",
   },
 ];
 
 export default function ModelShowcase() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
-    <section id="models" className="py-28 md:py-40" style={{ backgroundColor: "#0a0a0a" }}>
+    <section
+      id="models"
+      style={{ backgroundColor: "var(--win-bg)", padding: "0 16px 48px" }}
+    >
       <div className="container-site">
-        <Reveal className="text-center mb-20">
-          <p className="text-[11px] tracking-[0.4em] uppercase mb-5 font-medium" style={{ color: "#DC2626" }}>
-            THE MODELS
-          </p>
-          <h2 className="font-bebas text-white" style={{ fontSize: "clamp(2.5rem, 5vw, 4rem)" }}>
-            Choose Your Path.
-          </h2>
-        </Reveal>
+        {/* Outer window */}
+        <div className="win-window">
+          <div className="win-titlebar">
+            <div className="flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <rect x="1" y="1" width="6" height="6" fill="#FF0000" />
+                <rect x="9" y="1" width="6" height="6" fill="#00FF00" />
+                <rect x="1" y="9" width="6" height="6" fill="#0000FF" />
+                <rect x="9" y="9" width="6" height="6" fill="#FFFF00" />
+              </svg>
+              <span>Choose Your Path — Sales Model Explorer</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <button className="win-titlebar-btn">_</button>
+              <button className="win-titlebar-btn">□</button>
+              <button className="win-titlebar-btn" style={{ fontWeight: 900, color: "#c00" }}>×</button>
+            </div>
+          </div>
 
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {models.map((m, i) => {
-            const Icon = m.icon;
-            return (
-              <motion.div
-                key={m.title}
-                initial={{ opacity: 0, y: 50 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.1 + i * 0.12, ease: [0.25, 0.46, 0.45, 0.94] }}
+          {/* Menu */}
+          <div className="win-menubar">
+            {["File", "View", "Favorites", "Tools", "Help"].map((m) => (
+              <button
+                key={m}
+                className="px-2 py-0.5"
+                style={{ background: "none", border: "none", fontFamily: "Tahoma, Arial, sans-serif", fontSize: "11px", cursor: "default" }}
               >
-                <Link
-                  href={m.href}
-                  className="group block h-full border border-[#1a1a1a] relative overflow-hidden transition-all duration-500 hover:border-[#DC2626]/40"
-                  style={{ backgroundColor: "#0d0d0d" }}
+                {m}
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4">
+            {/* Section header */}
+            <div
+              className="win-sunken px-4 py-3 mb-4 flex items-center gap-3"
+            >
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect x="2" y="2" width="28" height="28" rx="2" fill="#ece9d8" stroke="#808080" />
+                <text x="4" y="22" fill="#000080" fontSize="18" fontFamily="'VT323', monospace" fontWeight="700">THE</text>
+                <text x="4" y="30" fill="#000080" fontSize="18" fontFamily="'VT323', monospace" fontWeight="700">MODELS</text>
+              </svg>
+              <div>
+                <p
+                  style={{
+                    fontFamily: "'VT323', monospace",
+                    fontSize: "28px",
+                    color: "#000080",
+                    lineHeight: 1,
+                  }}
                 >
-                  {/* Top red accent that expands on hover */}
-                  <div className="absolute top-0 left-0 w-0 h-[2px] bg-[#DC2626] group-hover:w-full transition-all duration-700" />
+                  SELECT YOUR CAREER PATH
+                </p>
+                <p style={{ fontFamily: "Tahoma, Arial, sans-serif", fontSize: "11px", color: "#444" }}>
+                  3 programs available. Double-click to learn more.
+                </p>
+              </div>
+            </div>
 
-                  {/* Hover glow */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
-                    style={{ background: "radial-gradient(ellipse at 50% 0%, rgba(220,38,38,0.05) 0%, transparent 70%)" }}
-                  />
-
-                  {/* Card content */}
-                  <div className="relative p-8 md:p-9 flex flex-col h-full">
-                    {/* Icon + Number row */}
-                    <div className="flex items-start justify-between mb-7">
-                      <div className="text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity duration-500">
-                        <Icon />
-                      </div>
-                      <span className="text-[10px] tracking-[0.3em] font-medium" style={{ color: "#333" }}>
-                        {m.number}
-                      </span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-bebas text-3xl md:text-[2.2rem] text-white tracking-wider mb-3 group-hover:text-[#DC2626] transition-colors duration-500">
-                      {m.title}
-                    </h3>
-
-                    {/* Tagline */}
-                    <p className="text-[15px] font-medium text-white/70 mb-6">
-                      {m.tagline}
-                    </p>
-
-                    {/* Bullet points */}
-                    <div className="space-y-3 mb-8 flex-1">
-                      {m.bullets.map((b, bi) => (
-                        <div key={bi} className="flex items-start gap-3">
-                          <div className="w-[3px] h-[3px] rounded-full bg-[#DC2626] mt-2 flex-shrink-0 opacity-40" />
-                          <p className="text-[13px] font-light leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
-                            {b}
-                          </p>
+            {/* Model cards grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {models.map((m) => {
+                const Icon = m.icon;
+                return (
+                  <Link key={m.title} href={m.href} style={{ textDecoration: "none" }}>
+                    <div className="win-window h-full" style={{ cursor: "default" }}>
+                      {/* Card title bar */}
+                      <div
+                        className="win-titlebar"
+                        style={{
+                          background: `linear-gradient(90deg, ${m.iconBg} 0%, ${m.iconBg}cc 100%)`,
+                          padding: "3px 6px",
+                        }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div style={{ color: "white" }}>
+                            <Icon />
+                          </div>
+                          <span style={{ fontSize: "11px" }}>{m.title}</span>
                         </div>
-                      ))}
-                    </div>
-
-                    {/* Divider */}
-                    <div className="h-[1px] w-full mb-6" style={{ backgroundColor: "#1a1a1a" }} />
-
-                    {/* Stats row */}
-                    <div className="flex justify-between items-center mb-7">
-                      <div>
-                        <p className="text-[9px] tracking-[0.2em] uppercase mb-1 font-medium" style={{ color: "#444" }}>Schedule</p>
-                        <p className="text-[13px] font-semibold text-white/80">{m.stats.left}</p>
+                        <span style={{ fontSize: "10px", opacity: 0.6 }}>{m.number}</span>
                       </div>
-                      <div className="text-right">
-                        <p className="text-[9px] tracking-[0.2em] uppercase mb-1 font-medium" style={{ color: "#444" }}>Path</p>
-                        <p className="text-[13px] font-semibold text-white/80">{m.stats.right}</p>
+
+                      <div className="p-3">
+                        {/* Tagline in sunken box */}
+                        <div
+                          className="win-sunken px-3 py-2 mb-3"
+                          style={{
+                            fontFamily: "Tahoma, Arial, sans-serif",
+                            fontSize: "11px",
+                            fontWeight: 700,
+                            color: "#000080",
+                          }}
+                        >
+                          {m.tagline}
+                        </div>
+
+                        {/* Bullet list */}
+                        <ul
+                          style={{
+                            fontFamily: "Tahoma, Arial, sans-serif",
+                            fontSize: "11px",
+                            color: "#333",
+                            listStyle: "none",
+                            padding: 0,
+                            marginBottom: "12px",
+                          }}
+                        >
+                          {m.bullets.map((b, i) => (
+                            <li
+                              key={i}
+                              style={{
+                                paddingLeft: "16px",
+                                position: "relative",
+                                marginBottom: "4px",
+                                lineHeight: "1.4",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  position: "absolute",
+                                  left: "4px",
+                                  top: "0",
+                                  color: m.iconBg,
+                                  fontWeight: 700,
+                                }}
+                              >
+                                •
+                              </span>
+                              {b}
+                            </li>
+                          ))}
+                        </ul>
+
+                        {/* Stats row */}
+                        <div
+                          style={{
+                            height: "1px",
+                            borderTop: "1px solid #808080",
+                            borderBottom: "1px solid white",
+                            marginBottom: "8px",
+                          }}
+                        />
+                        <div className="flex justify-between">
+                          <div>
+                            <p style={{ fontSize: "9px", fontFamily: "Tahoma", color: "#666", textTransform: "uppercase" }}>Schedule</p>
+                            <p style={{ fontSize: "11px", fontFamily: "Tahoma", fontWeight: 700, color: "#000" }}>{m.stats.schedule}</p>
+                          </div>
+                          <div style={{ textAlign: "right" }}>
+                            <p style={{ fontSize: "9px", fontFamily: "Tahoma", color: "#666", textTransform: "uppercase" }}>Path</p>
+                            <p style={{ fontSize: "11px", fontFamily: "Tahoma", fontWeight: 700, color: "#000" }}>{m.stats.path}</p>
+                          </div>
+                        </div>
+
+                        {/* CTA button */}
+                        <div style={{ marginTop: "12px" }}>
+                          <button
+                            className="btn-primary"
+                            style={{ width: "100%", backgroundColor: m.iconBg, color: "white", borderColor: `${m.iconBg}aa ${m.iconBg}44 ${m.iconBg}44 ${m.iconBg}aa` }}
+                          >
+                            Learn More &rsaquo;&rsaquo;
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="win-statusbar" style={{ fontSize: "10px" }}>
+                        <div className="win-statusbar-panel">{m.stats.schedule}</div>
                       </div>
                     </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
 
-                    {/* CTA */}
-                    <span className="inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.2em] text-[#DC2626] group-hover:gap-5 transition-all duration-300">
-                      LEARN MORE
-                      <span className="inline-block w-5 h-[1px] bg-[#DC2626] group-hover:w-8 transition-all duration-300" />
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+          <div className="win-statusbar">
+            <div className="win-statusbar-panel" style={{ flex: 2 }}>3 objects</div>
+            <div className="win-statusbar-panel" style={{ flex: 1 }}>Internet zone</div>
+          </div>
         </div>
       </div>
     </section>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
 
 const links = [
   { label: "LOCALS", href: "/locals" },
@@ -11,119 +10,236 @@ const links = [
   { label: "RETAIL", href: "/retail" },
 ];
 
+const menuItems = ["File", "Edit", "View", "Favorites", "Help"];
+
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [time, setTime] = useState("");
   const [open, setOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const tick = () => {
+      const d = new Date();
+      setTime(
+        d.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "2-digit",
+          hour12: true,
+        })
+      );
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
   }, []);
 
-  useEffect(() => { setOpen(false); }, [pathname]);
+  useEffect(() => { setOpen(false); setActiveMenu(null); }, [pathname]);
   useEffect(() => { document.body.style.overflow = open ? "hidden" : ""; }, [open]);
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
-        style={{
-          backgroundColor: scrolled ? "rgba(10,10,10,0.97)" : "transparent",
-          backdropFilter: scrolled ? "blur(20px) saturate(1.2)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(220,38,38,0.15)" : "none",
-        }}
+      {/* ── Address Bar / Main Nav ── */}
+      <div
+        className="fixed top-0 left-0 right-0 z-50"
+        style={{ backgroundColor: "#d4d0c8", boxShadow: "0 2px 4px rgba(0,0,0,0.4)" }}
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between h-20">
-          <Link href="/" className="hover:opacity-70 transition-opacity duration-300 flex items-center">
-            <img
-              src="https://cdn.prod.website-files.com/698f77d21c9d6e158faeca4c/698f83a127fb9320e56e7f7a_un-white.svg"
-              alt="Uncommon Division"
-              className="h-7"
-            />
-          </Link>
+        {/* Title bar row */}
+        <div
+          className="win-titlebar"
+          style={{ padding: "4px 6px", minHeight: "28px" }}
+        >
+          {/* Icon + Title */}
+          <div className="flex items-center gap-2">
+            {/* Win2K-style sun/solar icon */}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="3" fill="#FFD700" />
+              <line x1="8" y1="1" x2="8" y2="3" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="8" y1="13" x2="8" y2="15" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="1" y1="8" x2="3" y2="8" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="13" y1="8" x2="15" y2="8" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="2.9" y1="2.9" x2="4.3" y2="4.3" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="11.7" y1="11.7" x2="13.1" y2="13.1" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="13.1" y1="2.9" x2="11.7" y2="4.3" stroke="#FFD700" strokeWidth="1.5" />
+              <line x1="4.3" y1="11.7" x2="2.9" y2="13.1" stroke="#FFD700" strokeWidth="1.5" />
+            </svg>
+            <span style={{ fontFamily: "Tahoma, Arial, sans-serif", fontSize: "11px", fontWeight: 700, color: "white" }}>
+              Uncommon Division - Solar Sales Careers
+            </span>
+          </div>
 
-          <div className="hidden md:flex items-center gap-10">
+          {/* Title bar buttons */}
+          <div className="flex items-center gap-1">
+            <button className="win-titlebar-btn" aria-label="Minimize">_</button>
+            <button className="win-titlebar-btn" aria-label="Maximize">□</button>
+            <button
+              className="win-titlebar-btn"
+              aria-label="Close"
+              style={{ fontWeight: 900, color: "#c00" }}
+            >
+              ×
+            </button>
+          </div>
+        </div>
+
+        {/* Menu bar row */}
+        <div className="win-menubar">
+          {menuItems.map((item) => (
+            <button
+              key={item}
+              onMouseEnter={() => activeMenu && setActiveMenu(item)}
+              onClick={() => setActiveMenu(activeMenu === item ? null : item)}
+              className="px-2 py-0.5 text-[11px] cursor-default"
+              style={{
+                background: activeMenu === item ? "var(--win-highlight)" : "transparent",
+                color: activeMenu === item ? "white" : "var(--win-text)",
+                fontFamily: "Tahoma, Arial, sans-serif",
+                border: "none",
+                textDecoration: activeMenu === item ? "none" : "none",
+              }}
+            >
+              {item}
+            </button>
+          ))}
+          <div style={{ flex: 1 }} />
+          {/* Nav links styled as toolbar buttons */}
+          <div className="flex items-center gap-1 pr-1">
             {links.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="relative text-[13px] font-medium tracking-[0.15em] transition-colors duration-200 group"
-                style={{ color: pathname === l.href ? "#DC2626" : "rgba(255,255,255,0.6)" }}
+                className="win-titlebar-btn"
+                style={{
+                  width: "auto",
+                  height: "20px",
+                  padding: "0 10px",
+                  fontSize: "11px",
+                  fontFamily: "Tahoma, Arial, sans-serif",
+                  textDecoration: "none",
+                  backgroundColor: pathname === l.href ? "var(--win-highlight)" : "var(--win-silver)",
+                  color: pathname === l.href ? "white" : "var(--win-text)",
+                  display: "flex",
+                  alignItems: "center",
+                }}
               >
                 {l.label}
-                <span
-                  className="absolute -bottom-1.5 left-0 h-[1px] bg-[#DC2626] transition-all duration-300"
-                  style={{ width: pathname === l.href ? "100%" : "0" }}
-                />
-                <span className="absolute -bottom-1.5 left-0 h-[1px] bg-[#DC2626] w-0 group-hover:w-full transition-all duration-300" />
               </Link>
             ))}
+            <Link
+              href="/apply"
+              className="win-titlebar-btn"
+              style={{
+                width: "auto",
+                height: "20px",
+                padding: "0 10px",
+                fontSize: "11px",
+                fontWeight: 700,
+                fontFamily: "Tahoma, Arial, sans-serif",
+                textDecoration: "none",
+                backgroundColor: "#000080",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                borderColor: "#5555aa #00002a #00002a #5555aa",
+              }}
+            >
+              APPLY NOW
+            </Link>
           </div>
+        </div>
 
-          <Link
-            href="/apply"
-            className="hidden md:inline-block magnetic-btn px-7 py-2.5 bg-[#DC2626] text-white text-[12px] font-bold tracking-[0.2em]"
+        {/* Address bar row */}
+        <div
+          className="flex items-center gap-2 px-2 py-1"
+          style={{
+            backgroundColor: "#d4d0c8",
+            borderTop: "1px solid #a0a098",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "11px",
+              fontFamily: "Tahoma, Arial, sans-serif",
+              color: "#444",
+              whiteSpace: "nowrap",
+            }}
           >
-            APPLY NOW
-          </Link>
+            Address:
+          </span>
+          <div
+            className="flex items-center gap-1 flex-1"
+            style={{
+              backgroundColor: "white",
+              borderTop: "2px solid #808080",
+              borderLeft: "2px solid #808080",
+              borderRight: "2px solid white",
+              borderBottom: "2px solid white",
+              padding: "1px 4px",
+              fontSize: "11px",
+              fontFamily: "Tahoma, Arial, sans-serif",
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="7" fill="#1761c7" />
+              <text x="4" y="12" fill="white" fontSize="10" fontFamily="Tahoma" fontWeight="700">e</text>
+            </svg>
+            <span>http://uncommondivision.com/</span>
+          </div>
+          <button
+            className="btn-primary"
+            style={{ padding: "2px 12px", fontSize: "11px", minWidth: 0 }}
+          >
+            Go
+          </button>
 
-          <button onClick={() => setOpen(!open)} className="md:hidden z-50 p-2" aria-label="Menu">
-            <div className="w-6 flex flex-col gap-1.5">
-              <motion.span animate={{ rotate: open ? 45 : 0, y: open ? 8 : 0 }} className="block h-[1.5px] bg-white origin-center" />
-              <motion.span animate={{ opacity: open ? 0 : 1 }} className="block h-[1.5px] bg-white" />
-              <motion.span animate={{ rotate: open ? -45 : 0, y: open ? -8 : 0 }} className="block h-[1.5px] bg-white origin-center" />
-            </div>
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="md:hidden win-titlebar-btn"
+            style={{ width: "20px", height: "20px" }}
+            aria-label="Menu"
+          >
+            ≡
           </button>
         </div>
-      </motion.nav>
+      </div>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ clipPath: "circle(0% at calc(100% - 40px) 40px)" }}
-            animate={{ clipPath: "circle(150% at calc(100% - 40px) 40px)" }}
-            exit={{ clipPath: "circle(0% at calc(100% - 40px) 40px)" }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="fixed inset-0 z-40 bg-[#0a0a0a] flex flex-col items-center justify-center"
-          >
-            {links.map((l, i) => (
-              <motion.div
-                key={l.href}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15 + i * 0.08, duration: 0.4 }}
-              >
+      {/* ── Mobile Menu ── */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 flex items-center justify-center"
+          style={{ backgroundColor: "var(--win-bg)", paddingTop: "90px" }}
+        >
+          <div className="win-window" style={{ width: "300px" }}>
+            <div className="win-titlebar">
+              <div className="flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="7" fill="#FFD700" />
+                </svg>
+                <span>Navigation</span>
+              </div>
+              <button onClick={() => setOpen(false)} className="win-titlebar-btn" style={{ fontWeight: 900, color: "#c00" }}>×</button>
+            </div>
+            <div className="p-4 flex flex-col gap-2">
+              {links.map((l) => (
                 <Link
+                  key={l.href}
                   href={l.href}
+                  className="btn-primary"
+                  style={{ width: "100%", fontSize: "13px", padding: "6px 12px" }}
                   onClick={() => setOpen(false)}
-                  className="font-bebas text-6xl text-white tracking-[0.15em] block py-3 hover:text-[#DC2626] transition-colors"
                 >
                   {l.label}
                 </Link>
-              </motion.div>
-            ))}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.4 }}
-              className="mt-10"
-            >
-              <Link
-                href="/apply"
-                onClick={() => setOpen(false)}
-                className="magnetic-btn inline-block px-12 py-4 bg-[#DC2626] text-white font-bold tracking-[0.2em] text-sm"
-              >
+              ))}
+              <div style={{ height: "1px", background: "var(--win-border-darker)", margin: "4px 0" }} />
+              <Link href="/apply" className="btn-primary" style={{ width: "100%", fontSize: "13px", padding: "6px 12px", backgroundColor: "#000080", color: "white", borderColor: "#5555aa #00002a #00002a #5555aa" }} onClick={() => setOpen(false)}>
                 APPLY NOW
               </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
