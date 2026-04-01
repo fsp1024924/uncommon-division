@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import CustomCursor from "@/components/CustomCursor";
 
 export const metadata: Metadata = {
   title: "Uncommon Division | Solar Sales Careers",
@@ -15,8 +14,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body className="noise cursor-none md:cursor-none">
-        <CustomCursor />
+      <body>
         <Navbar />
         {children}
         <Footer />

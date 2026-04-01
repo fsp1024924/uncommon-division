@@ -1,114 +1,303 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Tahoma:wght@400;700&display=swap');
 
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════
+   MICROSOFT WINDOWS 2000 DESIGN SYSTEM
+   ═══════════════════════════════════════════ */
+
 :root {
-  --bg: #0a0a0a;
-  --bg-alt: #0d0d0d;
-  --bg-card: #111111;
-  --red: #DC2626;
-  --red-dark: #991b1b;
-  --gold: #C8A951;
-  --white: #ffffff;
-  --muted: #888888;
+  /* Win2K Color Palette */
+  --win-bg: #008080;          /* Classic teal desktop */
+  --win-silver: #d4d0c8;      /* Window chrome silver */
+  --win-silver-light: #ece9d8; /* Light silver / window bg */
+  --win-silver-dark: #a0a098; /* Darker silver */
+  --win-title-start: #000080; /* Title bar gradient start - navy */
+  --win-title-end: #1084d0;   /* Title bar gradient end - blue */
+  --win-text: #000000;
+  --win-text-muted: #444444;
+  --win-red: #ff0000;
+  --win-highlight: #316ac5;   /* Selection highlight blue */
+  --win-white: #ffffff;
+  --win-border-light: #ffffff;
+  --win-border-dark: #808080;
+  --win-border-darker: #404040;
+  --win-inset: #d4d0c8;
 }
 
+/* ═══════ RESET ═══════ */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: auto; }
 
 body {
-  background-color: var(--bg);
-  color: #d4d4d4;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 16px;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--win-bg);
+  color: var(--win-text);
+  font-family: 'Tahoma', 'MS Sans Serif', Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.4;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
   overflow-x: hidden;
+  /* Tiled desktop wallpaper-style subtle pattern */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23008080'/%3E%3Crect x='0' y='0' width='1' height='1' fill='%23007878' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 .font-bebas {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.05em;
+  font-family: 'VT323', 'Courier New', monospace;
+  letter-spacing: 0.02em;
 }
 
-/* ═══════ HERO ═══════ */
-@keyframes heroGlow {
-  0%, 100% { opacity: 0.04; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.08; transform: translate(-50%, -50%) scale(1.3); }
-}
-.hero-glow {
-  position: absolute;
-  width: 900px;
-  height: 900px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(220,38,38,0.2) 0%, transparent 65%);
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: heroGlow 8s ease-in-out infinite;
-  pointer-events: none;
+/* ═══════ WINDOWS 2000 BEVEL UTILITIES ═══════ */
+
+/* Raised bevel (button / window) */
+.win-raised {
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+  background-color: var(--win-silver);
 }
 
-/* ═══════ NOISE ═══════ */
-.noise::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-  opacity: 0.4;
+/* Sunken inset (text boxes, panels) */
+.win-sunken {
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
+  background-color: var(--win-white);
+}
+
+/* Window chrome / dialog */
+.win-window {
+  background-color: var(--win-silver);
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+}
+
+/* Title bar */
+.win-titlebar {
+  background: linear-gradient(90deg, var(--win-title-start) 0%, var(--win-title-end) 100%);
+  color: white;
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+/* Title bar buttons */
+.win-titlebar-btn {
+  width: 16px;
+  height: 14px;
+  background-color: var(--win-silver);
+  border-top: 1px solid var(--win-border-light);
+  border-left: 1px solid var(--win-border-light);
+  border-right: 1px solid var(--win-border-dark);
+  border-bottom: 1px solid var(--win-border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 900;
+  color: var(--win-text);
+  cursor: default;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.win-titlebar-btn:hover {
+  background-color: #c0bdb5;
 }
 
 /* ═══════ BUTTONS ═══════ */
 .btn-primary {
   display: inline-block;
-  padding: 16px 40px;
-  background-color: var(--red);
-  color: white;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  padding: 4px 16px;
+  background-color: var(--win-silver);
+  color: var(--win-text);
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
   text-decoration: none;
-  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
   border: none;
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+  min-width: 80px;
+  text-align: center;
 }
+
 .btn-primary:hover {
-  background-color: #b91c1c;
-  transform: translateY(-2px);
-  box-shadow: 0 0 50px rgba(220,38,38,0.35), 0 15px 40px rgba(0,0,0,0.4);
+  background-color: var(--win-highlight);
+  color: white;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-primary:active {
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
 }
 
 .btn-outline {
   display: inline-block;
-  padding: 16px 40px;
-  background: transparent;
-  color: rgba(255,255,255,0.6);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
+  padding: 4px 16px;
+  background-color: var(--win-silver);
+  color: var(--win-text);
+  font-family: 'Tahoma', Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0;
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.15);
-  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
+  border-top: 2px solid var(--win-border-light);
+  border-left: 2px solid var(--win-border-light);
+  border-right: 2px solid var(--win-border-darker);
+  border-bottom: 2px solid var(--win-border-darker);
+  min-width: 80px;
+  text-align: center;
 }
+
 .btn-outline:hover {
-  border-color: var(--red);
+  background-color: var(--win-highlight);
   color: white;
-  transform: translateY(-2px);
+  transform: none;
 }
 
-/* ═══════ COUNTER GLOW ═══════ */
-.counter-glow {
-  text-shadow: 0 0 80px rgba(200,169,81,0.25), 0 0 160px rgba(200,169,81,0.1);
+/* ═══════ TASKBAR ═══════ */
+.win-taskbar {
+  background: linear-gradient(180deg, #2e8be7 0%, #1761c7 30%, #1761c7 70%, #1556b8 100%);
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  border-top: 1px solid #5b9bd5;
+  box-shadow: 0 -1px 0 #0b47a3 inset;
 }
 
-/* ═══════ RED LINE ═══════ */
+/* ═══════ SCROLLBAR ═══════ */
+::-webkit-scrollbar { width: 16px; background: var(--win-silver); }
+::-webkit-scrollbar-track {
+  background: var(--win-silver);
+  border-left: 1px solid var(--win-border-dark);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--win-silver);
+  border-top: 1px solid var(--win-border-light);
+  border-left: 1px solid var(--win-border-light);
+  border-right: 1px solid var(--win-border-dark);
+  border-bottom: 1px solid var(--win-border-dark);
+  min-height: 20px;
+}
+::-webkit-scrollbar-button {
+  background: var(--win-silver);
+  height: 16px;
+  border-top: 1px solid var(--win-border-light);
+  border-left: 1px solid var(--win-border-light);
+  border-right: 1px solid var(--win-border-dark);
+  border-bottom: 1px solid var(--win-border-dark);
+}
+
+/* ═══════ SELECTION ═══════ */
+::selection { background: var(--win-highlight); color: white; }
+
+/* ═══════ FORMS ═══════ */
+input:focus, select:focus, textarea:focus {
+  outline: 1px dotted var(--win-text);
+  box-shadow: none;
+  border-color: var(--win-border-darker) !important;
+}
+input[type="radio"], input[type="checkbox"] { accent-color: var(--win-highlight); }
+
+/* ═══════ CONTAINER ═══════ */
+.container-site {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+@media (min-width: 768px) {
+  .container-site {
+    max-width: 900px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-site {
+    max-width: 1024px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+/* ═══════ WIN2K HELPERS ═══════ */
+.win-menubar {
+  background-color: var(--win-silver);
+  border-bottom: 1px solid var(--win-border-dark);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  font-size: 11px;
+  padding: 2px 4px;
+}
+
+.win-menubar a {
+  padding: 2px 8px;
+  color: var(--win-text);
+  text-decoration: none;
+  display: block;
+}
+
+.win-menubar a:hover {
+  background-color: var(--win-highlight);
+  color: white;
+}
+
+.win-statusbar {
+  background-color: var(--win-silver);
+  border-top: 1px solid var(--win-border-dark);
+  padding: 2px 6px;
+  font-size: 11px;
+  color: var(--win-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.win-statusbar-panel {
+  border-top: 1px solid var(--win-border-darker);
+  border-left: 1px solid var(--win-border-darker);
+  border-right: 1px solid var(--win-border-light);
+  border-bottom: 1px solid var(--win-border-light);
+  padding: 1px 8px;
+  font-size: 10px;
+}
+
+/* ═══════ RED LINE (Repurposed as Win2K separator) ═══════ */
 .red-line {
-  height: 1px;
-  background: linear-gradient(90deg, transparent 5%, var(--red) 50%, transparent 95%);
+  height: 2px;
+  background: var(--win-border-darker);
+  border-top: 1px solid var(--win-border-dark);
 }
 
 /* ═══════ VIDEO EMBED ═══════ */
@@ -117,7 +306,10 @@ body {
   padding-bottom: 56.25%;
   height: 0;
   overflow: hidden;
-  border: 1px solid #1a1a1a;
+  border-top: 2px solid var(--win-border-darker);
+  border-left: 2px solid var(--win-border-darker);
+  border-right: 2px solid var(--win-border-light);
+  border-bottom: 2px solid var(--win-border-light);
 }
 .video-embed iframe {
   position: absolute;
@@ -128,53 +320,58 @@ body {
   border: 0;
 }
 
-/* ═══════ SCROLLBAR ═══════ */
-::-webkit-scrollbar { width: 3px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: var(--red); }
-
-/* ═══════ SELECTION ═══════ */
-::selection { background: rgba(220,38,38,0.25); color: #fff; }
-
-/* ═══════ FORM ═══════ */
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--red) !important;
-  box-shadow: 0 0 0 3px rgba(220,38,38,0.12);
+/* ═══════ COUNTER ═══════ */
+.counter-glow {
+  font-family: 'VT323', 'Courier New', monospace;
+  color: #000080;
+  text-shadow: none;
 }
-input[type="radio"], input[type="checkbox"] { accent-color: var(--red); }
 
 /* ═══════ HORIZONTAL SCROLL ═══════ */
 .scroll-x {
   display: flex;
-  gap: 1rem;
+  gap: 8px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  scrollbar-width: auto;
 }
-.scroll-x::-webkit-scrollbar { display: none; }
 .scroll-x > * { scroll-snap-align: start; flex-shrink: 0; }
 
-/* ═══════ CONTAINER ═══════ */
-.container-site {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding-left: 24px;
-  padding-right: 24px;
+/* ═══════ NOISE (disabled) ═══════ */
+.noise::after {
+  display: none;
 }
 
-@media (min-width: 768px) {
-  .container-site {
-    padding-left: 48px;
-    padding-right: 48px;
-  }
+/* ═══════ WIN2K PROGRESS BAR ═══════ */
+.win-progress {
+  height: 16px;
+  background: var(--win-white);
+  border-top: 1px solid var(--win-border-darker);
+  border-left: 1px solid var(--win-border-darker);
+  border-right: 1px solid var(--win-border-light);
+  border-bottom: 1px solid var(--win-border-light);
+  overflow: hidden;
 }
 
-@media (min-width: 1280px) {
-  .container-site {
-    padding-left: 64px;
-    padding-right: 64px;
-  }
+.win-progress-bar {
+  height: 100%;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--win-highlight) 0px,
+    var(--win-highlight) 10px,
+    #4a8fd4 10px,
+    #4a8fd4 12px
+  );
+}
+
+/* ═══════ MARQUEE ═══════ */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.win-marquee-inner {
+  animation: marquee 20s linear infinite;
+  display: flex;
+  width: max-content;
 }
